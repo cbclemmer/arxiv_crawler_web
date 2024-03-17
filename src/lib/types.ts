@@ -3,7 +3,14 @@ export type ListState<DT> = {
   items: DT[]
 }
 
-export type AppState = { }
+export type Project = {
+  id: number
+  name: string
+}
+
+export type AppState = {
+  projectList: ListState<Project>
+}
 
 export interface Action<T, C, P> {
   type: T,

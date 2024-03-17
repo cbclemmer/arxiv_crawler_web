@@ -58,7 +58,7 @@ export class Collection<DT, C extends string> {
     try {
       const res = await this.post('create', data)
       if (!res || res.status != 200) {
-        console.error('ERROR: creating tune failed: ' + res.data)
+        console.error('ERROR: creating failed: ' + res.data)
         return null
       }
       model = res.data
