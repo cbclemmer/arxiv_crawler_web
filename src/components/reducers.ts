@@ -4,6 +4,7 @@ import { createModelReducer } from '../lib/model'
 
 const rootReducer = combineReducers({
     projectModel: createModelReducer('PROJECT_MODEL'),
+    paperModel: createModelReducer('PAPER_MODEL'),
     projectList: createCollectionReducer('PROJECT_LIST')
 });
 

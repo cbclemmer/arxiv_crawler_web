@@ -14,7 +14,7 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           <Route path="/" element={<ProjectList />} />
-          <Route path="/projects/show/:id" element={<ProjectShow />} />
+          <Route path="/projects/show/:name" element={<ProjectShow />} />
         </Routes>
       </Router>
     </div>

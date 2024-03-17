@@ -29,7 +29,7 @@ export default () => {
         {!loading && <div>
             {projects.map((project: Project) => (
             <div>
-                <Link to={`/projects/show/${project.id}`}>{project.name}</Link>
+                <Link to={`/projects/show/${project.name}`}>{project.name}</Link>
             </div>
             ))}
         </div>}

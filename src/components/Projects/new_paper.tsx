@@ -1,21 +1,21 @@
 import { useDispatch } from 'react-redux'
 
 import React, { useState } from 'react'
-import { Project } from '../../lib/types'
+import { Paper, Project } from '../../lib/types'
 import { Model } from '../../lib/model'
 
-export default (params: { cb: () => void }) => {
+export default (params: { cb: () => void, project_name: string }) => {
     const cb = params.cb
     const dispatch = useDispatch()
-    const model = new Model<Project, 'PROJECT_MODEL'>('PROJECT_MODEL', 'project', dispatch)
-    const [projectName, setProjectName] = useState('')
+    const model = new Model<Paper, 'PAPER_MODEL'>('PAPER_MODEL', 'paper', dispatch)
+    const [paperId, setPaperId] = useState('')
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!projectName.trim()) return
-        const project: Project = { name: projectName, papers: [] }
-        await model.create(project)
-        setProjectName('')
+        if (!paperId.trim()) return
+        const paper: Paper = { project_name: params.project_name, arxiv_id: paperId, title: '', abstract: '' }
+        await model.create(paper)
+        setPaperId('')
         cb()
     }
 
@@ -24,18 +24,18 @@ export default (params: { cb: () => void }) => {
         <div className='input-group mb-3'>
             <div className='input-group-prepend'>
             <span className='input-group-text'>
-                New Project Name
+                New Paper Arxiv ID
             </span>
             </div>
             <input
             type='text'
             className='form-control'
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
+            value={paperId}
+            onChange={(e) => setPaperId(e.target.value)}
             />
         </div>
         <button className="btn btn-primary" type="submit">
-            Create
+            Add
         </button>
     </form>
   )

@@ -5,11 +5,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppState, Paper, Project } from '../../lib/types'
 
 import { Model } from '../../lib/model'
+import NewPaper from './new_paper'
 
 export default () => {
-    const { id } = useParams()
-    if (!id || isNaN(parseInt(id))) return (<div>Invalid ID</div>)
-    const numId = parseInt(id)
+    const { name } = useParams()
+    if (!name) return (<div>Invalid ID</div>)
     const project = useSelector((state: AppState) => state.projectModel.model)
 
     const loading = useSelector((state: AppState) => state.projectModel.loading)
@@ -18,14 +18,19 @@ export default () => {
 
     const model = new Model<Project, 'PROJECT_MODEL'>('PROJECT_MODEL', 'project', dispatch)
     useEffect(() => {
-        model.get(numId)
+        model.get(name)
     }, [])
+
+    const addPaperCb = () => {
+        model.get(name)
+    }
 
     return (
         <div>
         {loading && <div>Loading...</div>}
         {!loading && <div>
             <h1>{project?.name}</h1>
+            <NewPaper cb={addPaperCb} project_name={name}/>
             {project?.papers.map((paper: Paper) => (
                 <div>{paper.title}</div>
             ))}
