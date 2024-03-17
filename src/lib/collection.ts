@@ -1,5 +1,5 @@
 import { getApi, postApi } from "./api"
-import { Action, ActionList, ListState } from "./types"
+import { Action, ActionList, ListState } from "./abs_types"
 import { createAction } from "./util"
 
 const LOADING = 'LOADING'
@@ -23,82 +23,22 @@ export class Collection<DT, C extends string> {
     this.runAction = <K extends keyof ListActions<DT, C>>(type: K, payload: ListActions<DT, C>[K]['payload']) => runAction<DT, C, K>(component, dispatch, type, payload)
   }
 
-  private async get(endpoint: string, data: any = { }): Promise<any> {
+  private async apiGet(endpoint: string, data: any = { }): Promise<any> {
     return (await getApi(`${this.api_midpoint}/${endpoint}`, data))
   }
 
-  private async post(endpoint: string, data: DT) {
+  private async apiPost(endpoint: string, data: DT) {
     return postApi(`${this.api_midpoint}/${endpoint}`, data)
   }
 
-  public async getOne(id: number): Promise<DT | null> {
-    this.runAction(LOADING, true)
-    let model = null
-    try {
-      model = (await this.get(`get/${id}`)).data as DT
-    } finally {
-      this.runAction(LOADING, false)
-    }
-    return model
-  }
-
-  public async getList(params: any = { }) {
+  public async get(params: any = { }) {
     this.runAction(LOADING, true)
     try {
-      const res = await this.get('list', params)
+      const res = await this.apiGet('list', params)
       this.runAction(UPDATE, res.data)
     } finally {
       this.runAction(LOADING, false)
     }
-  }
-
-  public async create(data: DT): Promise<DT | null> {
-    this.runAction(LOADING, true)
-    let model = null
-    try {
-      const res = await this.post('create', data)
-      if (!res || res.status != 200) {
-        console.error('ERROR: creating failed: ' + res.data)
-        return null
-      }
-      model = res.data
-    } finally {
-      this.runAction(LOADING, false)
-    }
-    return model as DT
-  }
-
-  public async edit(data: DT): Promise<boolean> {
-    this.runAction(LOADING, true)
-    let ret = false
-    try {
-      const res = await this.post('edit', data)
-      if (!res) {
-        console.error('ERROR: creating tune failed')
-        return false
-      }
-      ret = res.data
-    } finally {
-      this.runAction(LOADING, false)
-    }
-    return ret
-  }
-
-  public async remove(model: DT) {
-    this.runAction(LOADING, true)
-    try {
-      const res = await this.post('delete', model)
-      if (!!res.data.error) {
-        console.error(res.data.errror)
-        return
-      }
-    } finally {
-      this.runAction(LOADING, false)
-    }
-  }
-
-  public async emptyList() {
-    this.runAction(UPDATE, [])
   }
 }
 

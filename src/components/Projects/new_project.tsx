@@ -1,18 +1,22 @@
+import { useDispatch } from 'react-redux'
+
 import React, { useState } from 'react'
 import { Project } from '../../lib/types'
-import { Collection } from '../../lib/collection'
+import { Model } from '../../lib/model'
 
-export default (data: { collection: Collection<Project, 'PROJECT_LIST'> }) => {
-    const collection = data.collection
+export default (params: { cb: () => void }) => {
+    const cb = params.cb
+    const dispatch = useDispatch()
+    const model = new Model<Project, 'PROJECT_MODEL'>('PROJECT_MODEL', 'project', dispatch)
     const [projectName, setProjectName] = useState('')
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!projectName.trim()) return
-        const project = { id: 0, name: projectName }
-        await collection.create(project)
+        const project: Project = { id: 0, name: projectName, papers: [] }
+        await model.create(project)
         setProjectName('')
-        await collection.getList()
+        cb()
     }
 
   return (

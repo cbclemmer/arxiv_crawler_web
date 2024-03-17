@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import React from 'react'
 
-import Home from './Home/page'
+import ProjectList from './Projects/list'
+import ProjectShow from './Projects/show'
 
 const App: React.FC = () => {
   return (
@@ -12,7 +13,8 @@ const App: React.FC = () => {
       </nav>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<ProjectList />} />
+          <Route path="/projects/show/:id" element={<ProjectShow />} />
         </Routes>
       </Router>
     </div>
