@@ -6,6 +6,8 @@ import { AppState, Paper, Reference } from '../../lib/types'
 
 import { Model } from '../../lib/model'
 
+import AddToProject from './add_to_project'
+
 export default () => {
     const { id } = useParams()
     if (!id) return (<div>Invalid ID</div>)
@@ -83,6 +85,7 @@ export default () => {
                                 </div>
                             )}
                         </div>
+                        {ref.arxiv_id && <AddToProject paper_id={ref.arxiv_id} />}
                     </div>
                 ))}
             </div>
