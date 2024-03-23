@@ -31,7 +31,7 @@ export class Model<DT, C extends string> {
     return postApi(`${this.api_midpoint}/${endpoint}`, data)
   }
 
-  public async get(id: any): Promise<void> {
+  public async get(id: any, cb: (() => void) | null = null): Promise<void> {
     this.runAction(LOADING, true)
     let model = null
     try {
@@ -39,6 +39,7 @@ export class Model<DT, C extends string> {
       this.runAction(UPDATE, model)
     } finally {
       this.runAction(LOADING, false)
+      if (cb != null) cb()
     }
   }
 

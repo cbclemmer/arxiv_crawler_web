@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { AppState, Paper, Reference } from '../../lib/types'
+import { AppState, Paper } from '../../lib/types'
 
 import { Model } from '../../lib/model'
 
-import AddToProject from './add_to_project'
+import Accordian from './accordian'
 
 export default () => {
     const { id } = useParams()
@@ -14,10 +14,11 @@ export default () => {
     const paper = useSelector((state: AppState) => state.paperModel.model)
 
     const loading = useSelector((state: AppState) => state.paperModel.loading)
-
+ 
     const dispatch = useDispatch()
 
     const model = new Model<Paper, 'PAPER_MODEL'>('PAPER_MODEL', 'paper', dispatch)
+
     useEffect(() => {
         model.get(id)
     }, [])
@@ -26,23 +27,28 @@ export default () => {
         model.get(id)
     }
 
+    
     return (
         <div>
         {loading && <div>Loading...</div>}
         {!loading && <div>
-            <h3>
-                <Link to={`https://arxiv.org/abs/${paper?.arxiv_id}`}>
-                    {paper?.title}
-                </Link>
-            </h3>
-            <p>
-                <Link to={`https://arxiv.org/pdf/${paper?.arxiv_id}`}>
-                    [PDF]
-                </Link>
-            </p>
-            <small>
-                {paper?.abstract}
-            </small><br/><br/>
+            <div className="card">
+                <div className="card-body">
+                    <h5 className="card-title">
+                        <Link to={`https://arxiv.org/abs/${paper?.arxiv_id}`}>
+                            {paper?.title}
+                        </Link>
+                    </h5>
+                    <h6 className="card-subtitle mb-2 text-body-secondary">
+                        <Link to={`https://arxiv.org/pdf/${paper?.arxiv_id}`}>
+                            [PDF]
+                        </Link>
+                    </h6>
+                    <p className="card-text">
+                        {paper?.abstract}
+                    </p>
+                </div>
+            </div>
             <div>
                 {paper?.references_error && 
                     <div>
@@ -50,44 +56,11 @@ export default () => {
                         {paper?.references_error}
                     </div>
                 }
-                {!paper?.references_error && paper?.references.map((ref: Reference) => (
-                    <div key={ref.id} style={{ 'padding': '10px' }}>
-                        <div>
-                            {ref.arxiv_id &&
-                                <div>
-                                    ARXIV:
-                                    <Link to={`/papers/show/${ref.arxiv_id.replace('.', '')}`}>
-                                        {ref.title}
-                                    </Link>
-                                </div>
-                            }
-                            {!ref.arxiv_id && ref.url && 
-                                <div>
-                                    URL: 
-                                    <Link to={ref.url}>
-                                        {ref.title}
-                                    </Link>
-                                </div>
-                            }
-                            {!ref.arxiv_id && !ref.url && 
-                            <div>
-                                Scholar: 
-                                <Link to={"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C44&q="+ ref.title + "&btnG="}>
-                                    {ref.title}
-                                </Link>
-                            </div>
-                            }
-                        </div>
-                        <div>
-                            {Object.keys(ref.data).map((key: string) => 
-                                <div>
-                                    <b>{key}:</b> {ref.data[key]}
-                                </div>
-                            )}
-                        </div>
-                        {ref.arxiv_id && <AddToProject paper_id={ref.arxiv_id} />}
+                {!paper?.references_error && 
+                    <div>
+                        {Accordian({ items: paper?.references || [] })}
                     </div>
-                ))}
+                }
             </div>
         </div>}
         </div>
