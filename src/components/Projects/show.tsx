@@ -11,6 +11,7 @@ export default () => {
     const { name } = useParams()
     if (!name) return (<div>Invalid ID</div>)
     const project = useSelector((state: AppState) => state.projectModel.model)
+    const papers = useSelector((state: AppState) => state.projectModel.model?.papers || [])
 
     const loading = useSelector((state: AppState) => state.projectModel.loading)
 
@@ -31,9 +32,13 @@ export default () => {
         {!loading && <div>
             <h1>{project?.name}</h1>
             <NewPaper cb={addPaperCb} project_name={name}/>
-            {project?.papers.map((paper: Paper) => (
-                <div>{paper.title}</div>
-            ))}
+            <div>
+                {papers.map((paper: Paper) => (
+                    <div key={paper.arxiv_id}>
+                        {paper.title}
+                    </div>
+                ))}
+            </div>
         </div>}
         </div>
     )

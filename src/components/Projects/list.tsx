@@ -28,7 +28,7 @@ export default () => {
         {loading && <div>Loading...</div>}
         {!loading && <div>
             {projects.map((project: Project) => (
-            <div>
+            <div key={project.name}>
                 <Link to={`/projects/show/${project.name}`}>{project.name}</Link>
             </div>
             ))}
