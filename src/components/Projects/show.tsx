@@ -35,7 +35,9 @@ export default () => {
             <div>
                 {papers.map((paper: Paper) => (
                     <div key={paper.arxiv_id}>
-                        {paper.title}
+                        <Link to={`/papers/show/${paper.clean_id}`}>
+                            {paper.title}
+                        </Link>
                     </div>
                 ))}
             </div>

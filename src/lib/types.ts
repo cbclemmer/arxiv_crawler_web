@@ -1,11 +1,22 @@
 import { ListState, ModelState } from "./abs_types"
 
+export type Reference = {
+  title: string
+  arxiv_id: string
+  clean_id: string
+  url: string
+  author: string
+  data: any
+}
+
 export type Paper = {
   arxiv_id: string
+  clean_id: string
   title: string
   abstract: string
 
   project_name?: string
+  references: Reference[]
 }
 
 export type Project = {

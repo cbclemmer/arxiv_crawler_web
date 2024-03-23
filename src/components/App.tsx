@@ -3,6 +3,7 @@ import React from 'react'
 
 import ProjectList from './Projects/list'
 import ProjectShow from './Projects/show'
+import PaperShow from './Papers/show'
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<ProjectList />} />
           <Route path="/projects/show/:name" element={<ProjectShow />} />
+          <Route path="/papers/show/:id" element={<PaperShow />} />
         </Routes>
       </Router>
     </div>
