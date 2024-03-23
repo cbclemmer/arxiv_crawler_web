@@ -1,6 +1,7 @@
 import { ListState, ModelState } from "./abs_types"
 
 export type Reference = {
+  id: string
   title: string
   arxiv_id: string
   clean_id: string

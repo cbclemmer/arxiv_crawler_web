@@ -51,7 +51,7 @@ export default () => {
                     </div>
                 }
                 {!paper?.references_error && paper?.references.map((ref: Reference) => (
-                    <div key={ref.title} style={{ 'padding': '10px' }}>
+                    <div key={ref.id} style={{ 'padding': '10px' }}>
                         <div>
                             {ref.arxiv_id &&
                                 <div>
