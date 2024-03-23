@@ -17,8 +17,6 @@ export default () => {
 
     const model = new Model<Paper, 'PAPER_MODEL'>('PAPER_MODEL', 'paper', dispatch)
     useEffect(() => {
-        console.log('EFFECT')
-
         model.get(id)
     }, [])
 
@@ -44,7 +42,13 @@ export default () => {
                 {paper?.abstract}
             </small><br/><br/>
             <div>
-                {paper?.references.map((ref: Reference) => (
+                {paper?.references_error && 
+                    <div>
+                        <b>Error obtaining references:</b><br/>
+                        {paper?.references_error}
+                    </div>
+                }
+                {!paper?.references_error && paper?.references.map((ref: Reference) => (
                     <div key={ref.title} style={{ 'padding': '10px' }}>
                         {ref.arxiv_id &&
                             <div>

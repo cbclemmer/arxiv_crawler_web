@@ -16,6 +16,7 @@ export type Paper = {
   abstract: string
 
   project_name?: string
+  references_error: string | undefined
   references: Reference[]
 }
 

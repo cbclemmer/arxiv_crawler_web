@@ -13,7 +13,7 @@ export default (params: { cb: () => void, project_name: string }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!paperId.trim()) return
-        const paper: Paper = { project_name: params.project_name, arxiv_id: paperId, clean_id: '', title: '', abstract: '', references: [] }
+        const paper: Paper = { project_name: params.project_name, arxiv_id: paperId, clean_id: '', title: '', abstract: '', references: [], references_error: undefined }
         await model.create(paper)
         setPaperId('')
         cb()
