@@ -50,22 +50,39 @@ export default () => {
                 }
                 {!paper?.references_error && paper?.references.map((ref: Reference) => (
                     <div key={ref.title} style={{ 'padding': '10px' }}>
-                        {ref.arxiv_id &&
+                        <div>
+                            {ref.arxiv_id &&
+                                <div>
+                                    ARXIV:
+                                    <Link to={`/papers/show/${ref.arxiv_id.replace('.', '')}`}>
+                                        {ref.title}
+                                    </Link>
+                                </div>
+                            }
+                            {!ref.arxiv_id && ref.url && 
+                                <div>
+                                    URL: 
+                                    <Link to={ref.url}>
+                                        {ref.title}
+                                    </Link>
+                                </div>
+                            }
+                            {!ref.arxiv_id && !ref.url && 
                             <div>
-                                ARXIV:
-                                <Link to={`/papers/show/${ref.arxiv_id.replace('.', '')}`}>
+                                Scholar: 
+                                <Link to={"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C44&q="+ ref.title + "&btnG="}>
                                     {ref.title}
                                 </Link>
                             </div>
-                        }
-                        {!ref.arxiv_id && ref.url && 
-                            <Link to={ref.url}>
-                                {ref.title}
-                            </Link>
-                        }
-                        {!ref.arxiv_id && !ref.url && 
-                            <div>{ref.title}</div>
-                        }
+                            }
+                        </div>
+                        <div>
+                            {Object.keys(ref.data).map((key: string) => 
+                                <div>
+                                    <b>{key}:</b> {ref.data[key]}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
             </div>
