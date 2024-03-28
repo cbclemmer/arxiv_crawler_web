@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -39,10 +39,18 @@ export default () => {
                             {paper?.title}
                         </Link>
                     </h5>
+                    <h6>
+                        {paper?.arxiv_id}
+                    </h6>
                     <h6 className="card-subtitle mb-2 text-body-secondary">
                         <Link to={`https://arxiv.org/pdf/${paper?.arxiv_id}`}>
                             [PDF]
                         </Link>
+                    </h6>
+                    <h6>
+                    <Link to={"https://scholar.google.com/scholar?hl=en&as_sdt=0%2C44&q="+ paper?.title + "&btnG="}>
+                        Search on Google Scholar
+                    </Link>
                     </h6>
                     <p className="card-text">
                         {paper?.abstract}

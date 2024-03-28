@@ -4,6 +4,10 @@ export type Reference = {
   id: string
   title: string
   arxiv_id: string
+  date: string
+  dateFmt?: Date
+  month?: string
+  year?: number
   clean_id: string
   url: string
   author: string

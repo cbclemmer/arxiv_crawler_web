@@ -1,13 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { sortBy } from 'lodash'
 
-import React, { ReactElement } from 'react'
-import { AppState, Paper, Reference } from '../../lib/types'
-import { Model } from '../../lib/model'
+import { Reference } from '../../lib/types'
 import { Link } from 'react-router-dom'
 import AddToProject from './add_to_project'
 
 export default (params: { items: Reference[] }) => {
-    const items = params.items
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    const items = sortBy(params.items.map((i: Reference) => ({
+        ...i,
+        dateFmt: !!i.date ? new Date(i.date) : null,
+        month: !!i.date ? months[new Date(i.date).getMonth() - 1] : '',
+        year: !!i.date ? new Date(i.date).getFullYear() : ''
+    }) as Reference), (i: Reference) => !!i.dateFmt ? i.dateFmt.getTime() : Infinity)
 
     const getAccordianBody = (ref: Reference) => (
         <div key={ref.id} style={{ 'padding': '10px' }}>
@@ -55,11 +60,23 @@ export default (params: { items: Reference[] }) => {
         <div className="accordion" id="accordionExample">
             {items.map((item: Reference) => 
             <div key={item.id} className="accordion-item">
-                <h2 className="accordion-header">
-                <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={"#" + item.id} aria-expanded="true" aria-controls={item.id}>
-                    <b>{item.title}</b>
-                </button>
-                </h2>
+                <div className="accordion-header">
+                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={"#" + item.id} aria-expanded="true" aria-controls={item.id}>
+                        <h6>
+                            <b>
+                                {item.arxiv_id && 
+                                <span>
+                                    [{item.month} {item.year}]
+                                </span>
+                                }
+                                {item.title}
+                            </b><br/>
+                            <small>
+                                {item.author}
+                            </small>
+                        </h6>
+                    </button>
+                </div>
                 <div id={item.id} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div className="accordion-body">
                     {getAccordianBody(item)}
