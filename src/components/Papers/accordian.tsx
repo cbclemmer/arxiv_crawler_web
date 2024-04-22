@@ -61,7 +61,7 @@ export default (params: { items: Reference[] }) => {
             {items.map((item: Reference) => 
             <div key={item.id} className="accordion-item">
                 <div className="accordion-header">
-                    <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={"#" + item.id} aria-expanded="true" aria-controls={item.id}>
+                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={"#" + item.id} aria-expanded="true" aria-controls={item.id}>
                         <h6>
                             <b>
                                 {item.arxiv_id && 
