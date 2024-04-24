@@ -27,6 +27,18 @@ export default () => {
         model.get(id)
     }
 
+    const reloadPaper = () => {        
+        if (!confirm('This will reprosess the paper\'s references, which can take some time. Are you sure you want to continue?')) {
+            return
+        }
+        (async () => {
+            await model.apiPost('reload', {
+                arxiv_id: paper?.arxiv_id
+            })
+            alert('Paper references reloaded')
+        })()
+    }
+
     
     return (
         <div>
@@ -55,6 +67,11 @@ export default () => {
                     <p className="card-text">
                         {paper?.abstract}
                     </p>
+                    <div>
+                        <button className='btn btn-danger' onClick={reloadPaper}>
+                            Reload References
+                        </button>
+                    </div>
                 </div>
             </div>
             <div>
