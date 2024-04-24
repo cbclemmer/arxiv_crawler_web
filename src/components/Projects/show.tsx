@@ -26,6 +26,21 @@ export default () => {
         model.get(name)
     }
 
+    const removePaper = (paper: Paper) => {
+        if (!confirm('Are you sure you want to delete this paper?')) {
+            return
+        }
+        (async () => {
+            const paperModel = new Model<Paper, 'PAPER_MODEL'>('PAPER_MODEL', 'paper', dispatch)
+            await paperModel.apiPost('delete', {
+                arxiv_id: paper.arxiv_id,
+                project_name: project?.name
+            })
+            model.get(project?.name)
+            alert('Paper deleted')
+        })()
+    }
+
     return (
         <div>
         {loading && <div>Loading...</div>}
@@ -34,10 +49,17 @@ export default () => {
             <NewPaper cb={addPaperCb} project_name={name}/>
             <div>
                 {papers.map((paper: Paper) => (
-                    <div key={paper.arxiv_id}>
+                    <div key={paper.arxiv_id} style={ { marginBottom: '20px' } }>
                         <Link to={`/papers/show/${paper.clean_id}`}>
                             {paper.title}
                         </Link>
+                        <span 
+                            className="badge text-bg-danger" 
+                            onClick={removePaper.bind(null, paper)}
+                            style={ { cursor: 'pointer', marginLeft: '15px' }}
+                        >
+                            Delete
+                        </span>
                     </div>
                 ))}
             </div>

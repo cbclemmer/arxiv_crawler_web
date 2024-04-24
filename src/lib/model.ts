@@ -23,11 +23,11 @@ export class Model<DT, C extends string> {
     this.runAction = <K extends keyof ModelActions<DT, C>>(type: K, payload: ModelActions<DT, C>[K]['payload']) => runAction<DT, C, K>(component, dispatch, type, payload)
   }
 
-  private async apiGet(endpoint: string, data: any = { }): Promise<any> {
+  public async apiGet(endpoint: string, data: any = { }): Promise<any> {
     return (await getApi(`${this.api_midpoint}/${endpoint}`, data))
   }
 
-  private async apiPost(endpoint: string, data: DT) {
+  public async apiPost(endpoint: string, data: any) {
     return postApi(`${this.api_midpoint}/${endpoint}`, data)
   }
 
