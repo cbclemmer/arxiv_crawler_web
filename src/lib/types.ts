@@ -19,6 +19,7 @@ export type Paper = {
   clean_id: string
   title: string
   abstract: string
+  log: string
 
   project_name?: string
   references_error: string | undefined

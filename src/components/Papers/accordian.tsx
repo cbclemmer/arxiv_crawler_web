@@ -2,9 +2,8 @@ import { sortBy } from 'lodash'
 
 import { Reference } from '../../lib/types'
 import { Link } from 'react-router-dom'
-import AddToProject from './add_to_project'
 
-export default (params: { items: Reference[] }) => {
+export default (params: { items: Reference[], log: string }) => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
     const items = sortBy(params.items.map((i: Reference) => ({
@@ -52,12 +51,25 @@ export default (params: { items: Reference[] }) => {
                 )}
                 </tbody>
             </table>
-            {ref.arxiv_id && <AddToProject paper_id={ref.arxiv_id} />}
         </div>
     )
 
     return (
         <div className="accordion" id="accordionExample">
+            <div key={'ref_log'} className="accordion-item">
+                <div className="accordion-header">
+                    <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={"#ref_log"} aria-expanded="true" aria-controls={'ref_log'}>
+                        <h6>
+                            Reference Parse Log
+                        </h6>
+                    </button>
+                </div>
+                <div id={'ref_log'} className="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div className="accordion-body">
+                    <div dangerouslySetInnerHTML={{ __html: params.log.split('\n').join('<br/>\n')}}></div>
+                </div>
+                </div>
+            </div>
             {items.map((item: Reference) => 
             <div key={item.id} className="accordion-item">
                 <div className="accordion-header">

@@ -43,6 +43,7 @@ export default () => {
         await paperModel.apiPost('reload', {
             arxiv_id: paper?.arxiv_id
         })
+        await paperModel.get(id)
         alert('Paper references reloaded')
     }
 
@@ -50,7 +51,7 @@ export default () => {
         await paperModel.create({
             project_name: currentProject ?? '',
             arxiv_id: paper?.arxiv_id ?? '',
-            clean_id: '', title: '', abstract: '', references: [], references_error: ''
+            clean_id: '', title: '', abstract: '', references: [], references_error: '', log: ''
         })
         setContainsPaper(true)
         alert('Added paper to project')
@@ -99,12 +100,16 @@ export default () => {
                 {paper?.references_error && 
                     <div>
                         <b>Error obtaining references:</b><br/>
-                        {paper?.references_error}
+                        {paper?.references_error}<br></br>
+
+                        <b>Log</b>
+                        <div dangerouslySetInnerHTML={{ __html: paper?.log.split('\n').join('<br/>\n')}}>
+                        </div>
                     </div>
                 }
                 {!paper?.references_error && 
                     <div>
-                        {Accordian({ items: paper?.references || [] })}
+                        {Accordian({ items: paper?.references || [], log: paper?.log ?? '' })}
                     </div>
                 }
             </div>
