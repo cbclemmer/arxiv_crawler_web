@@ -20,23 +20,27 @@ export default (params: { cb: () => void, project_name: string }) => {
     }
 
   return (
-    <form onSubmit={handleSubmit}>
-        <div className='input-group mb-3'>
-            <div className='input-group-prepend'>
-            <span className='input-group-text'>
-                New Paper Arxiv ID
-            </span>
+    <form onSubmit={handleSubmit} className='row'>
+        <div className='col-md-8'>
+            <div className='input-group'>
+                <div className='input-group-prepend'>
+                <span className='input-group-text'>
+                    New Paper Arxiv ID
+                </span>
+                </div>
+                <input
+                type='text'
+                className='form-control'
+                value={paperId}
+                onChange={(e) => setPaperId(e.target.value)}
+                />
             </div>
-            <input
-            type='text'
-            className='form-control'
-            value={paperId}
-            onChange={(e) => setPaperId(e.target.value)}
-            />
         </div>
-        <button className="btn btn-primary" type="submit">
-            Add
-        </button>
+        <div className='col-md-4'>
+            <button className="btn btn-primary" type="submit">
+                Add
+            </button>
+        </div>
     </form>
   )
 }

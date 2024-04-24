@@ -47,7 +47,7 @@ export default () => {
         {!loading && <div>
             <h1>{project?.name}</h1>
             <NewPaper cb={addPaperCb} project_name={name}/>
-            <div>
+            <div style={ { marginTop: '15px' } }>
                 {papers.map((paper: Paper) => (
                     <div key={paper.arxiv_id} style={ { marginBottom: '20px' } }>
                         <Link to={`/papers/show/${paper.clean_id}`}>
