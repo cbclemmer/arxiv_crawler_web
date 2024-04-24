@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { some } from 'lodash'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { AppState, Paper } from '../../lib/types'
+import { AppState, Paper, Project } from '../../lib/types'
 
 import { Model } from '../../lib/model'
 
@@ -11,34 +12,49 @@ import Accordian from './accordian'
 export default () => {
     const { id } = useParams()
     if (!id) return (<div>Invalid ID</div>)
+    const [containsPaper, setContainsPaper] = useState(false)
+    const currentProject = localStorage.getItem('arxiv_crawler_current_project')
+    const project = useSelector((state: AppState) => state.projectModel.model)
     const paper = useSelector((state: AppState) => state.paperModel.model)
 
     const loading = useSelector((state: AppState) => state.paperModel.loading)
  
     const dispatch = useDispatch()
 
-    const model = new Model<Paper, 'PAPER_MODEL'>('PAPER_MODEL', 'paper', dispatch)
+    const paperModel = new Model<Paper, 'PAPER_MODEL'>('PAPER_MODEL', 'paper', dispatch)
+    const projectModel = new Model<Project, 'PROJECT_MODEL'>('PROJECT_MODEL', 'project', dispatch)
 
-    useEffect(() => {
-        model.get(id)
-    }, [])
+    useEffect(() => { (async () => {
+        const retPaper = await paperModel.get(id)
+        if (!!currentProject) {
+            const retProject = await projectModel.get(currentProject)
+            setContainsPaper(some(retProject.papers, (p: Paper) => p.arxiv_id == retPaper.arxiv_id))
+        }
+    })() }, [])
 
     if (!loading && !!paper?.arxiv_id && paper?.arxiv_id.replace('.', '') != id) {
-        model.get(id)
+        paperModel.get(id)
     }
 
-    const reloadPaper = () => {        
+    const reloadPaper = async () => {        
         if (!confirm('This will reprosess the paper\'s references, which can take some time. Are you sure you want to continue?')) {
             return
         }
-        (async () => {
-            await model.apiPost('reload', {
-                arxiv_id: paper?.arxiv_id
-            })
-            alert('Paper references reloaded')
-        })()
+        await paperModel.apiPost('reload', {
+            arxiv_id: paper?.arxiv_id
+        })
+        alert('Paper references reloaded')
     }
 
+    const addPaper = async () => {
+        await paperModel.create({
+            project_name: currentProject ?? '',
+            arxiv_id: paper?.arxiv_id ?? '',
+            clean_id: '', title: '', abstract: '', references: [], references_error: ''
+        })
+        setContainsPaper(true)
+        alert('Added paper to project')
+    }
     
     return (
         <div>
@@ -68,9 +84,14 @@ export default () => {
                         {paper?.abstract}
                     </p>
                     <div>
+                        {!containsPaper && <button className='btn btn-primary' onClick={addPaper} style={ { marginRight: '15px' } }>
+                            Add to Project
+                        </button>}
+
                         <button className='btn btn-danger' onClick={reloadPaper}>
                             Reload References
                         </button>
+
                     </div>
                 </div>
             </div>

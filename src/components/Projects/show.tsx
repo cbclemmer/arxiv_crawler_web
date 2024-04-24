@@ -10,6 +10,7 @@ import NewPaper from './new_paper'
 export default () => {
     const { name } = useParams()
     if (!name) return (<div>Invalid ID</div>)
+    localStorage.setItem('arxiv_crawler_current_project', name)
     const project = useSelector((state: AppState) => state.projectModel.model)
     const papers = useSelector((state: AppState) => state.projectModel.model?.papers || [])
 

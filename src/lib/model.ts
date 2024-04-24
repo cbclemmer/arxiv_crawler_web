@@ -31,7 +31,7 @@ export class Model<DT, C extends string> {
     return postApi(`${this.api_midpoint}/${endpoint}`, data)
   }
 
-  public async get(id: any, cb: (() => void) | null = null): Promise<void> {
+  public async get(id: any, cb: (() => void) | null = null): Promise<DT> {
     this.runAction(LOADING, true)
     let model = null
     try {
@@ -41,6 +41,7 @@ export class Model<DT, C extends string> {
       this.runAction(LOADING, false)
       if (cb != null) cb()
     }
+    return model
   }
 
   public async create(data: DT): Promise<DT | null> {
